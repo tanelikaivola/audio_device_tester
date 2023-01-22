@@ -1,0 +1,13 @@
+[package]
+name = "audio_device_tester"
+version = "0.1.0"
+authors = ["Taneli Kaivola <tanelikaivola@users.noreply.github.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.68"
+cpal = "0.14.2"
+itertools = "0.10.5"
+termcolor = "1.2.0"
