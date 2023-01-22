@@ -1,17 +1,19 @@
-name: Build
-
 on:
+  release:
+    types: [created]
   push:
-    branches: [main]
 
 jobs:
   release:
     name: release ${{ matrix.target }}
     runs-on: ubuntu-latest
+    if: github.event_name == 'release'
     strategy:
       fail-fast: false
       matrix:
-        target: [x86_64-pc-windows-gnu]
+        include:
+          - target: x86_64-pc-windows-gnu
+            archive: zip
     steps:
       - uses: actions/checkout@master
       - name: Compile and release
@@ -21,3 +23,4 @@ jobs:
         with:
           RUSTTARGET: ${{ matrix.target }}
           EXTRA_FILES: "README.md LICENSE"
+          ARCHIVE_TYPES: ${{ matrix.archive }}
