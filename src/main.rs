@@ -137,7 +137,10 @@ fn main() -> Result<(), anyhow::Error> {
         stdout.reset()?;
 
         let devices = host.devices()?;
-        for (device_index, device) in devices.enumerate() {
+        for (device_index, device) in devices
+            .filter(|d| d.default_output_config().is_ok())
+            .enumerate()
+        {
             let start = Instant::now();
             println!("  {}. \"{}\"", device_index + 1, device.name()?);
 
