@@ -1,9 +1,13 @@
 [package]
 name = "audio_device_tester"
-version = "0.1.3"
+description = "Test audio devices and report errors and long delays in operations"
+version = "0.1.4"
 authors = ["Taneli Kaivola <tanelikaivola@users.noreply.github.com>"]
 edition = "2021"
+repository = "https://github.com/tanelikaivola/audio_device_tester"
 license = "GPL-3.0-only"
+readme = "README.md"
+categories = ["command-line-utilities", "multimedia::audio"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
