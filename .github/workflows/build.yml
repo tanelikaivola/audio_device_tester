@@ -3,6 +3,9 @@ on:
     types: [created]
   push:
 
+permissions:
+  contents: write
+
 jobs:
   release:
     name: release ${{ matrix.target }}
@@ -19,7 +22,7 @@ jobs:
       - name: Compile and release
         uses: rust-build/rust-build.action@v1.4.0
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           RUSTTARGET: ${{ matrix.target }}
           EXTRA_FILES: "README.md LICENSE"
