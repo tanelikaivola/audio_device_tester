@@ -1,6 +1,9 @@
 #![allow(clippy::too_many_lines)]
 #![allow(clippy::missing_errors_doc)]
 
+mod display;
+use display::CPALString;
+
 extern crate anyhow;
 extern crate cpal;
 use itertools::Itertools;
@@ -28,10 +31,12 @@ fn main() -> Result<(), anyhow::Error> {
         stdout.reset()?;
         let host = cpal::host_from_id(host_id)?;
 
-        let default_in = host.default_input_device().map(|e| e.name().unwrap());
-        let default_out = host.default_output_device().map(|e| e.name().unwrap());
-        println!("  Default Input Device:\n    {default_in:?}");
-        println!("  Default Output Device:\n    {default_out:?}");
+        if let Some(default_in) = host.default_input_device().map(|e| e.name().unwrap()) {
+            println!("  Default Input Device: {default_in}");
+        }
+        if let Some(default_out) = host.default_output_device().map(|e| e.name().unwrap()) {
+            println!("  Default Output Device: {default_out}");
+        }
 
         let devices = host.devices()?;
         println!("  Devices: ");
@@ -41,7 +46,10 @@ fn main() -> Result<(), anyhow::Error> {
 
             // Input configs
             if let Ok(conf) = device.default_input_config() {
-                println!("    Default input stream config:\n      {conf:?}");
+                println!(
+                    "    Default input stream config:\n      {}",
+                    conf.to_string()
+                );
                 input_rates
                     .entry(conf.sample_rate().0)
                     .or_default()
@@ -58,17 +66,20 @@ fn main() -> Result<(), anyhow::Error> {
                 println!("    All supported input stream configs:");
                 for (config_index, config) in input_configs.into_iter().enumerate() {
                     println!(
-                        "      {}.{}. {:?}",
+                        "      {}.{}. {}",
                         device_index + 1,
                         config_index + 1,
-                        config
+                        config.to_string()
                     );
                 }
             }
 
             // Output configs
             if let Ok(conf) = device.default_output_config() {
-                println!("    Default output stream config:\n      {conf:?}");
+                println!(
+                    "    Default output stream config:\n      {}",
+                    conf.to_string()
+                );
                 output_rates
                     .entry(conf.sample_rate().0)
                     .or_default()
@@ -85,10 +96,10 @@ fn main() -> Result<(), anyhow::Error> {
                 println!("    All supported output stream configs:");
                 for (config_index, config) in output_configs.into_iter().enumerate() {
                     println!(
-                        "      {}.{}. {:?}",
+                        "      {}.{}. {}",
                         device_index + 1,
                         config_index + 1,
-                        config
+                        config.to_string()
                     );
                 }
             }
@@ -146,7 +157,7 @@ fn main() -> Result<(), anyhow::Error> {
 
             // Output configs
             if let Ok(conf) = device.default_output_config() {
-                println!("    Default output stream config:\n      {conf:?}");
+                println!("    {}", conf.to_string());
                 match conf.sample_format() {
                     cpal::SampleFormat::I16 => run::<i16>(&device, &conf.into()),
                     cpal::SampleFormat::U16 => run::<u16>(&device, &conf.into()),
