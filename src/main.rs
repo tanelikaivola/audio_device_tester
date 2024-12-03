@@ -1,5 +1,8 @@
 #![allow(clippy::too_many_lines)]
 #![allow(clippy::missing_errors_doc)]
+#![deny(clippy::panicking_unwrap)]
+#![deny(clippy::unwrap_used)]
+#![deny(clippy::unwrap_in_result)]
 
 mod display;
 use display::CPALString;
@@ -29,10 +32,16 @@ fn main() -> Result<(), anyhow::Error> {
         stdout.reset()?;
         let host = cpal::host_from_id(host_id)?;
 
-        if let Some(default_in) = host.default_input_device().map(|e| e.name().unwrap()) {
+        if let Some(default_in) = host
+            .default_input_device()
+            .map(|e| e.name().unwrap_or("UNKNOWN".to_string()))
+        {
             println!("  Default Input Device: {default_in}");
         }
-        if let Some(default_out) = host.default_output_device().map(|e| e.name().unwrap()) {
+        if let Some(default_out) = host
+            .default_output_device()
+            .map(|e| e.name().unwrap_or("UNKNOWN".to_string()))
+        {
             println!("  Default Output Device: {default_out}");
         }
 
