@@ -4,8 +4,6 @@
 mod display;
 use display::CPALString;
 
-extern crate anyhow;
-extern crate cpal;
 use itertools::Itertools;
 
 use cpal::{
