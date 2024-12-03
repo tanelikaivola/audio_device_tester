@@ -158,12 +158,23 @@ fn main() -> Result<(), anyhow::Error> {
             // Output configs
             if let Ok(conf) = device.default_output_config() {
                 println!("    {}", conf.to_string());
-                match conf.sample_format() {
-                    cpal::SampleFormat::I16 => run::<i16>(&device, &conf.into()),
-                    cpal::SampleFormat::U16 => run::<u16>(&device, &conf.into()),
-                    cpal::SampleFormat::F32 => run::<f32>(&device, &conf.into()),
+                match match conf.sample_format() {
+                    cpal::SampleFormat::I16 => run::<i16>(&device, &conf.clone().into()),
+                    cpal::SampleFormat::U16 => run::<u16>(&device, &conf.clone().into()),
+                    cpal::SampleFormat::F32 => run::<f32>(&device, &conf.clone().into()),
+                } {
+                    Ok(_) => {
+                        stdout.set_color(ColorSpec::new().set_fg(Some(Color::Green)))?;
+                        println!("     Device opened successfully");
+                        stdout.reset()?;
+                    }
+                    Err(e) => {
+                        stdout.set_color(ColorSpec::new().set_fg(Some(Color::Red)))?;
+                        println!("     Error opening device: {e}");
+                        println!("     Attempted format: {:?}", conf);
+                        stdout.reset()?;
+                    }
                 }
-                .unwrap();
             }
 
             let elapsed = start.elapsed();
