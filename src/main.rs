@@ -124,29 +124,23 @@ fn main() -> Result<(), anyhow::Error> {
         println!("Default sample rates:");
         stdout.reset()?;
 
-        let rates = input_rates
+        for rate in input_rates
             .keys()
             .chain(output_rates.keys())
             .sorted()
-            .dedup();
-        for rate in rates {
+            .dedup()
+        {
             println!("  {rate} Hz");
-            input_rates
-                .iter()
-                .filter(|(r, _)| r == &rate)
-                .for_each(|(_, names)| {
-                    for name in names {
-                        println!("    Input: {name}");
-                    }
-                });
-            output_rates
-                .iter()
-                .filter(|(r, _)| r == &rate)
-                .for_each(|(_, names)| {
-                    for name in names {
-                        println!("    Output: {name}");
-                    }
-                });
+            if let Some(names) = input_rates.get(rate) {
+                for name in names {
+                    println!("    Input: {name}");
+                }
+            }
+            if let Some(names) = output_rates.get(rate) {
+                for name in names {
+                    println!("    Output: {name}");
+                }
+            }
         }
         println!();
 
