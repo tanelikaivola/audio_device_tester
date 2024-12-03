@@ -172,12 +172,12 @@ fn main() -> Result<(), anyhow::Error> {
                 } {
                     Ok(_) => {
                         stdout.set_color(ColorSpec::new().set_fg(Some(Color::Green)))?;
-                        println!("     Device opened successfully");
+                        println!("     Sample played successfully");
                         stdout.reset()?;
                     }
                     Err(e) => {
                         stdout.set_color(ColorSpec::new().set_fg(Some(Color::Red)))?;
-                        println!("     Error opening device: {e}");
+                        println!("     Error playing sample: {e}");
                         println!("     Attempted format: {:?}", conf);
                         stdout.reset()?;
                     }
