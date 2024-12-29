@@ -1,7 +1,7 @@
 [package]
 name = "audio_device_tester"
 description = "Test audio devices and report errors and long delays in operations"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Taneli Kaivola <tanelikaivola@users.noreply.github.com>"]
 edition = "2021"
 repository = "https://github.com/tanelikaivola/audio_device_tester"
